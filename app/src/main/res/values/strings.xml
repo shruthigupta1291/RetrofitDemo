@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RetrofitDemo</string>
+    <string name="user_profile">User Profile Pic</string>
+    <string name="repositoryname">RepositoryName</string>
+</resources>
