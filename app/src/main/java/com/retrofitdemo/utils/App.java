@@ -7,9 +7,7 @@ import com.retrofitdemo.networkLevelDagger.component.NetComponent;
 import com.retrofitdemo.networkLevelDagger.module.AppModule;
 import com.retrofitdemo.networkLevelDagger.module.NetModule;
 
-/**
- * Created by NAGA VENKATESH on 31-01-2018.
- */
+
 
 public class App extends Application {
     private NetComponent mNetComponent;

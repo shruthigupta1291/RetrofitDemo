@@ -19,7 +19,8 @@ import rx.schedulers.Schedulers;
 public class GithubRepositoryPresenter implements GithubRepositoryContractor.RepositoriesPresenter {
 
     public Retrofit mRetrofit;
-    GithubRepositoryContractor.RepositoriesView mRepositoriesView;
+    private GithubRepositoryContractor.RepositoriesView mRepositoriesView;
+    private final String USER_NAME = "JakeWharton";
 
     @Inject
     GithubRepositoryPresenter(Retrofit retrofit, GithubRepositoryContractor.RepositoriesView  mView){
@@ -30,11 +31,10 @@ public class GithubRepositoryPresenter implements GithubRepositoryContractor.Rep
     @Override
     public void getRepositoriesListApiData() {
             mRepositoriesView.showProgressDialog();
-            mRetrofit.create(API.class).listRepos("JakeWharton")
-                   .subscribeOn(Schedulers.io())
-                   .observeOn(AndroidSchedulers.mainThread())
-                   .unsubscribeOn(Schedulers.io())
-                   .subscribe(new Observer<List<Repo>>() {
+            mRetrofit.create(API.class).listRepos(USER_NAME)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<Repo>>() {
                @Override
                public void onCompleted() {
                    mRepositoriesView.hideProgressDialog();

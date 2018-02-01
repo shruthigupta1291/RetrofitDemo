@@ -1,5 +1,6 @@
 package com.retrofitdemo;
 
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import com.retrofitdemo.adapter.UserRepoAdapter;
 import com.retrofitdemo.dagger.DaggerGithubRepositoryComponent;
 import com.retrofitdemo.dagger.GitHubRepositoryModule;
+import com.retrofitdemo.databinding.ActivityMainBinding;
 import com.retrofitdemo.model.Repo;
 import com.retrofitdemo.utils.App;
 import java.util.ArrayList;
@@ -18,10 +20,12 @@ import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements GithubRepositoryContractor.RepositoriesView {
 
-    public final static String TAG = MainActivity.class.getSimpleName();
+
     RecyclerView recyclerView;
     private List<Repo> mRepoList = new ArrayList<>();
     UserRepoAdapter userRepoAdapter;
+    ActivityMainBinding activityMainBinding;
+
 
     @Inject
     GithubRepositoryPresenter mGithubRepositoryPresenter;
@@ -29,19 +33,18 @@ public class MainActivity extends AppCompatActivity implements GithubRepositoryC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         recyclerView=findViewById(R.id.rvItems);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(MainActivity.this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        userRepoAdapter=new UserRepoAdapter(mRepoList);
-        recyclerView.setAdapter(userRepoAdapter);
+        activityMainBinding.rvItems.setLayoutManager(linearLayoutManager);
+        userRepoAdapter = new UserRepoAdapter(mRepoList);
+        activityMainBinding.rvItems.setAdapter(userRepoAdapter);
 
         DaggerGithubRepositoryComponent.builder()
                 .netComponent(((App) getApplicationContext()).getNetComponent())
                 .gitHubRepositoryModule(new GitHubRepositoryModule(this))
                 .build().inject(this);
-
         mGithubRepositoryPresenter.getRepositoriesListApiData();
     }
 
@@ -62,6 +65,6 @@ public class MainActivity extends AppCompatActivity implements GithubRepositoryC
 
     @Override
     public void updateErrorView(String message) {
-        Toast.makeText(getApplicationContext(), "Error" + message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Error" + message, Toast.LENGTH_LONG).show();
     }
 }
